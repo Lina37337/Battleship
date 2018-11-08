@@ -4,26 +4,29 @@ var cols = 10;
 var squareSize = 50;
 
 // get the container element
-var gameBoardContainer = document.getElementById("gameboard");
+var gameBoardContainer = document.getElementById("gameBoard");
 
 // make the grid columns and rows
 for (i = 0; i < cols; i++) {
 	for (j = 0; j < rows; j++) {
-		
 		// create a new div HTML element for each grid square and make it the right size
 		var square = document.createElement("div");
 		gameBoardContainer.appendChild(square);
 
     // give each div element a unique id based on its row and column, like "s00"
-		square.id = 's' + j + i;			
+		square.id = 's' + j + i;
+
 		
 		// set each grid square's coordinates: multiples of the current row or column number
 		var topPosition = j * squareSize;
-		var leftPosition = i * squareSize;			
+		var leftPosition = i * squareSize;
 		
 		// use CSS absolute positioning to place each grid square on the page
 		square.style.top = topPosition + 'px';
-		square.style.left = leftPosition + 'px';						
+		square.style.left = leftPosition + 'px';
+    //square.style.backgroundColor = "green";
+    //square.innerHTML = "" + square.id + " t:<br>" + square.style.top;
+    //square.innerHTML = "" + square.id + " l:<br>" + square.style.left;
 	}
 }
 
@@ -38,14 +41,16 @@ for (i = 0; i < cols; i++) {
 */
 var hitCount = 0;
 
-/* create the 2d array that will contain the status of each square on the board
-   and place ships on the board (later, create function for random placement!)
-   0 = empty, 1 = part of a ship, 2 = a sunken part of a ship, 3 = a missed shot
-*/
-var gameBoard = [
-				[0,0,0,1,1,1,1,0,0,0],
+
+  var myNumber = Math.random();
+  var gameBoardNumber = Math.floor(myNumber * 3);
+  console.log(gameBoardNumber);
+
+  if (gameBoardNumber < 1) {
+    var gameBoard = [
 				[0,0,0,0,0,0,0,0,0,0],
 				[0,0,0,0,0,0,0,0,0,0],
+				[0,1,1,1,1,0,0,0,0,0],
 				[0,0,0,0,0,0,1,0,0,0],
 				[0,0,0,0,0,0,1,0,0,0],
 				[1,0,0,0,0,0,1,1,1,1],
@@ -55,8 +60,61 @@ var gameBoard = [
 				[1,0,0,0,0,0,0,0,0,0]
 				]
 
+  } else if (gameBoardNumber < 2) {
+    var gameBoard = [
+				[0,0,0,0,0,0,0,0,0,1],
+				[0,0,0,0,0,0,0,0,0,1],
+				[0,0,0,1,1,1,0,0,0,1],
+				[1,0,0,0,0,0,0,0,0,1],
+				[1,0,0,0,0,0,0,0,0,1],
+				[1,1,1,1,1,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,1,1,0,0]
+				]
+
+  } else if (gameBoardNumber < 3) {
+    var gameBoard = [
+			  [0,1,0,0,0,0,0,0,0,0],
+				[0,1,0,0,0,0,0,0,0,0],
+				[0,1,0,0,0,0,1,1,1,0],
+				[0,1,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,1],
+				[0,0,0,0,0,0,0,0,0,1],
+				[0,0,0,0,0,0,0,0,0,1],
+				[1,0,0,1,1,1,0,0,0,1],
+				[1,0,0,0,0,0,0,0,0,0],
+				[1,0,0,0,0,0,0,0,0,0]
+				]
+
+  } else if (gameBoardNumber < 4) {
+    var gameBoard = [
+				[0,0,0,0,0,0,0,0,0,0],
+				[1,1,1,1,1,0,0,0,0,0],
+				[0,0,0,1,0,0,0,0,0,0],
+				[0,0,0,1,0,0,0,0,1,0],
+				[0,0,0,1,0,0,0,0,1,0],
+				[0,0,0,0,0,0,0,0,1,0],
+				[0,0,0,0,1,1,0,0,1,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[1,1,1,0,0,0,0,0,0,0]
+				]
+
+  } 
+
+    console.log(gameBoard);
+
+/* create the 2d array that will contain the status of each square on the board
+   and place ships on the board (later, create function for random placement!)
+
+   0 = empty, 1 = part of a ship, 2 = a sunken part of a ship, 3 = a missed shot
+*/
+
 // set event listener for all elements in gameboard, run fireTorpedo function when square is clicked
 gameBoardContainer.addEventListener("click", fireTorpedo, false);
+
 
 // initial code via http://www.kirupa.com/html5/handling_events_for_many_elements.htm:
 function fireTorpedo(e) {
@@ -89,7 +147,8 @@ function fireTorpedo(e) {
 		// if player clicks a square that's been previously hit, let them know
 		} else if (gameBoard[row][col] > 1) {
 			alert("Stop wasting your torpedos! You already fired at this location.");
-		}		
+		}
     }
     e.stopPropagation();
+
 }
